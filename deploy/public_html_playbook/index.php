@@ -1,14 +1,34 @@
 <?php
 // Bridge front controller that lives in public_html/playbook
-// It bootstraps the Laravel app located outside webroot in ../playbook
+// It bootstraps the Laravel app which may be outside webroot (../../playbook)
+// or nested under this directory (./app), depending on the hosting layout.
 
-// Assumes this layout:
-// - App:   /home/USER/playbook
-// - Web:   /home/USER/public_html/playbook (this file)
-// So from here to the app: ../../playbook
+// Try to detect the application base path dynamically.
+$candidates = [
+    // App outside webroot
+    __DIR__ . '/../../playbook',
+    // App nested under this web dir
+    __DIR__ . '/app',
+    // One-level up nested variant
+    __DIR__ . '/../app',
+];
 
-require __DIR__ . '/../../playbook/vendor/autoload.php';
-$app = require_once __DIR__ . '/../../playbook/bootstrap/app.php';
+$appBase = null;
+foreach ($candidates as $base) {
+    if (is_file($base . '/vendor/autoload.php') && is_file($base . '/bootstrap/app.php')) {
+        $appBase = $base;
+        break;
+    }
+}
+
+if (!$appBase) {
+    http_response_code(500);
+    echo 'Laravel app base not found. Checked: ' . htmlspecialchars(implode(', ', $candidates));
+    exit;
+}
+
+require $appBase . '/vendor/autoload.php';
+$app = require_once $appBase . '/bootstrap/app.php';
 
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
