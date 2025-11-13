@@ -20,6 +20,7 @@ Route::get('/', function () {
 
 // Public assets (serve club logos without symlink)
 Route::get('/public/club-logos/{filename}', [PublicAssetController::class, 'clubLogo'])->name('public.club_logo');
+Route::get('/public/storage/{path}', [PublicAssetController::class, 'storage'])->where('path', '.*')->name('public.storage');
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');

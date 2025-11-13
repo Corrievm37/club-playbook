@@ -10,11 +10,22 @@ class PublicAssetController extends Controller
     public function clubLogo(string $filename)
     {
         $relative = 'uploads/club_logos/' . $filename;
-        if (!Storage::disk('public')->exists($relative)) {
-            abort(404);
+        // 1) storage/app/public/uploads/club_logos
+        if (Storage::disk('public')->exists($relative)) {
+            $absolute = storage_path('app/public/' . $relative);
+            return response()->file($absolute);
         }
-        $absolute = storage_path('app/public/' . $relative);
-        return response()->file($absolute);
+        // 2) public/uploads/club_logos (if someone uploaded directly to public)
+        $publicPath = public_path('uploads/club_logos/' . $filename);
+        if (is_file($publicPath)) {
+            return response()->file($publicPath);
+        }
+        // 3) public/storage/uploads/club_logos via symlink
+        $publicSymlinkPath = public_path('storage/' . $relative);
+        if (is_file($publicSymlinkPath)) {
+            return response()->file($publicSymlinkPath);
+        }
+        abort(404);
     }
 
     public function storage(string $path)
