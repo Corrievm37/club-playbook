@@ -42,3 +42,9 @@ deployment:
           find "$ALT_APP_DIR/storage" -type d -exec chmod 775 {} \; || true; 
           find "$ALT_APP_DIR/bootstrap/cache" -type d -exec chmod 775 {} \; || true; 
         fi
+    # Permissions when app lives directly in WEB_DIR
+    - |
+        if [ -d "$WEB_DIR/storage" ]; then 
+          find "$WEB_DIR/storage" -type d -exec chmod 775 {} \; || true; 
+          find "$WEB_DIR/bootstrap/cache" -type d -exec chmod 775 {} \; || true; 
+        fi

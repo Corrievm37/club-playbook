@@ -66,7 +66,7 @@
                     @endauth
                     <div class="justify-self-center">
                         <div class="bg-white/90 rounded-full shadow ring-1 ring-gray-200 px-3 py-1">
-                            <img src="{{ asset('storage/'.$footerClub->logo_url) }}" alt="{{ $footerClub->name }} logo" class="h-10 sm:h-12 w-auto" />
+                            <img src="{{ route('public.club_logo', basename($footerClub->logo_url)) }}" alt="{{ $footerClub->name }} logo" class="h-10 sm:h-12 w-auto" />
                         </div>
                     </div>
                     <div class="justify-self-end"></div>
