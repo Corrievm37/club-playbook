@@ -46,6 +46,8 @@ class ClubController extends Controller
             $ext = strtolower($file->getClientOriginalExtension());
             $base = Str::slug($data['slug'] ?? $data['name'] ?? 'club');
             $stableBase = $base.'-'.$club->id; // stable base without extension
+            // Ensure directory exists
+            Storage::disk('public')->makeDirectory('uploads/club_logos');
             // Remove any previous files with same stable base but different ext
             foreach (Storage::disk('public')->files('uploads/club_logos') as $existing) {
                 if (str_starts_with(basename($existing), $stableBase.'.')) {
@@ -107,6 +109,8 @@ class ClubController extends Controller
             $ext = strtolower($file->getClientOriginalExtension());
             $base = Str::slug(($data['slug'] ?? $club->slug) ?: ($data['name'] ?? $club->name) ?: 'club');
             $stableBase = $base.'-'.$club->id; // stable base without extension
+            // Ensure directory exists
+            Storage::disk('public')->makeDirectory('uploads/club_logos');
             // Remove any previous files with same stable base but different ext
             foreach (Storage::disk('public')->files('uploads/club_logos') as $existing) {
                 if (str_starts_with(basename($existing), $stableBase.'.')) {
