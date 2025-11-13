@@ -14,7 +14,7 @@ deployment:
           /bin/cp -f "$ALT_APP_DIR/../deploy/public_html_playbook/index.php" "$WEB_DIR/index.php";
           /bin/cp -f "$ALT_APP_DIR/../deploy/public_html_playbook/.htaccess" "$WEB_DIR/.htaccess";
         fi
-    # Publish built assets (Vite build) from primary app dir or alt nested app dir
+    # Publish built assets (Vite build) from primary app dir or alt/nested app dir or when repo is the web dir
     - |
         if [ -d "$APP_DIR/public/build" ]; then 
           mkdir -p "$WEB_DIR/build"; 
@@ -22,6 +22,9 @@ deployment:
         elif [ -d "$ALT_APP_DIR/public/build" ]; then 
           mkdir -p "$WEB_DIR/build"; 
           /bin/cp -R "$ALT_APP_DIR/public/build/." "$WEB_DIR/build/"; 
+        elif [ -d "$WEB_DIR/public/build" ]; then
+          mkdir -p "$WEB_DIR/build";
+          /bin/cp -R "$WEB_DIR/public/build/." "$WEB_DIR/build/";
         fi
     # Optional: expose storage (symlink if supported)
     - |
