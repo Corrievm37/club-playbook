@@ -45,7 +45,14 @@ class ClubController extends Controller
             $file = $request->file('logo');
             $ext = strtolower($file->getClientOriginalExtension());
             $base = Str::slug($data['slug'] ?? $data['name'] ?? 'club');
-            $filename = $base.'-'.$club->id.'.'.$ext; // stable name
+            $stableBase = $base.'-'.$club->id; // stable base without extension
+            // Remove any previous files with same stable base but different ext
+            foreach (Storage::disk('public')->files('uploads/club_logos') as $existing) {
+                if (str_starts_with(basename($existing), $stableBase.'.')) {
+                    Storage::disk('public')->delete($existing);
+                }
+            }
+            $filename = $stableBase.'.'.$ext; // stable name
             $relative = 'uploads/club_logos/'.$filename;
             Storage::disk('public')->putFileAs('uploads/club_logos', $file, $filename);
             $club->logo_url = $relative; // relative path on public disk
@@ -99,12 +106,15 @@ class ClubController extends Controller
             $file = $request->file('logo');
             $ext = strtolower($file->getClientOriginalExtension());
             $base = Str::slug(($data['slug'] ?? $club->slug) ?: ($data['name'] ?? $club->name) ?: 'club');
-            $filename = $base.'-'.$club->id.'.'.$ext; // stable name
-            $relative = 'uploads/club_logos/'.$filename;
-            // Delete old file if different path or different extension
-            if (!empty($club->logo_url) && $club->logo_url !== $relative) {
-                Storage::disk('public')->delete($club->logo_url);
+            $stableBase = $base.'-'.$club->id; // stable base without extension
+            // Remove any previous files with same stable base but different ext
+            foreach (Storage::disk('public')->files('uploads/club_logos') as $existing) {
+                if (str_starts_with(basename($existing), $stableBase.'.')) {
+                    Storage::disk('public')->delete($existing);
+                }
             }
+            $filename = $stableBase.'.'.$ext; // stable name
+            $relative = 'uploads/club_logos/'.$filename;
             Storage::disk('public')->putFileAs('uploads/club_logos', $file, $filename);
             $data['logo_url'] = $relative;
         }

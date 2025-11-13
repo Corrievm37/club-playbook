@@ -27,7 +27,7 @@
             </div>
             <div class="flex items-center gap-4">
                 @if($club->logo_url)
-                    <img src="{{ asset('storage/'.$club->logo_url) }}" alt="{{ $club->name }} logo" class="h-16 w-auto border rounded bg-white p-1" />
+                    <img src="{{ route('public.club_logo', basename($club->logo_url)) }}" alt="{{ $club->name }} logo" class="h-16 w-auto border rounded bg-white p-1" />
                 @else
                     <div class="text-gray-500 text-sm">No logo uploaded yet.</div>
                 @endif
