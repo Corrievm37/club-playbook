@@ -6,8 +6,14 @@ deployment:
     - export ALT_APP_DIR="$WEB_DIR/app"
     - mkdir -p "$WEB_DIR"
     # Bridge files (bootstrap Laravel outside webroot or nested app)
-    - /bin/cp -f "$APP_DIR/deploy/public_html_playbook/index.php" "$WEB_DIR/index.php"
-    - /bin/cp -f "$APP_DIR/deploy/public_html_playbook/.htaccess" "$WEB_DIR/.htaccess"
+    - |
+        if [ -f "$APP_DIR/deploy/public_html_playbook/index.php" ]; then
+          /bin/cp -f "$APP_DIR/deploy/public_html_playbook/index.php" "$WEB_DIR/index.php";
+          /bin/cp -f "$APP_DIR/deploy/public_html_playbook/.htaccess" "$WEB_DIR/.htaccess";
+        elif [ -f "$ALT_APP_DIR/../deploy/public_html_playbook/index.php" ]; then
+          /bin/cp -f "$ALT_APP_DIR/../deploy/public_html_playbook/index.php" "$WEB_DIR/index.php";
+          /bin/cp -f "$ALT_APP_DIR/../deploy/public_html_playbook/.htaccess" "$WEB_DIR/.htaccess";
+        fi
     # Publish built assets (Vite build) from primary app dir or alt nested app dir
     - |
         if [ -d "$APP_DIR/public/build" ]; then 
