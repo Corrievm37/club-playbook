@@ -1,0 +1,8 @@
+id,name,email,email_verified_at,password,remember_token,created_at,updated_at,id_number,boksmart_number
+1,Corrie,corrie@4you.co.za,,$2y$12$WyqHKHfoG97iXhuH/KVsh.eGArTVeoZEpb1ZpmxLqLvbCUSc0lyRy,,"2025-11-04 12:26:46","2025-11-04 12:26:46",,
+2,"Super Admin",admin@example.com,,$2y$12$NvQ5XO6OPuUy8M5WRXaV1uUm1mi6xp7hD9xZytGTEFi5JbWzZR/jW,,"2025-11-04 14:05:33","2025-11-04 14:05:33",,
+3,"Corrie van Mollendorf",test@test.com,,$2y$12$Bibf18Rg4xU3zfmNcJ2vJOPTPdTDQezyKeo58bp08BjwrUk3pxaQ6,,"2025-11-04 17:11:24","2025-11-06 13:25:08",,
+4,"Club Manager",club@test.com,,$2y$12$kyjm8Aq.1O5n/buRydPfNegiIUSEn00Gb7BnVmQv916ELcJvxbPm.,,"2025-11-04 17:15:18","2025-11-04 17:15:18",,
+5,"Test Manager",testers@test.com,,$2y$12$le1znW3HctivYqygMfc9t.x51pIWiyupRhuOFjX./hqpToFJkx/ee,,"2025-11-04 17:32:55","2025-11-04 17:32:55",,
+6,"Corrie Coach",coach@test.com,,$2y$12$5XHgF08oGvh/dH3IuOet9uiB8U7zxhMrC1kH./jsb0EvbowvlELxS,,"2025-11-05 13:27:21","2025-11-05 13:27:21",,
+7,"Corrie Coach",coaching@test.com,,$2y$12$edj5VX.yT/rZ1FenU8m24u6apCuzVfZQo07jMvfdy.j7H4nBFlFsy,,"2025-11-05 13:35:37","2025-11-05 13:35:37",8312285033081,BS-125895
