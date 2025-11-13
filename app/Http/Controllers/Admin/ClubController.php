@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Club;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ClubController extends Controller
 {
@@ -37,11 +39,18 @@ class ClubController extends Controller
             'phone' => 'nullable|string|max:255',
             'logo' => 'nullable|image|max:5120',
         ]);
+        // Create first to get an ID for deterministic filename
+        $club = Club::create(collect($data)->except('logo')->toArray());
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('uploads/club_logos', 'public');
-            $data['logo_url'] = $path; // store relative path on public disk
+            $file = $request->file('logo');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $base = Str::slug($data['slug'] ?? $data['name'] ?? 'club');
+            $filename = $base.'-'.$club->id.'.'.$ext; // stable name
+            $relative = 'uploads/club_logos/'.$filename;
+            Storage::disk('public')->putFileAs('uploads/club_logos', $file, $filename);
+            $club->logo_url = $relative; // relative path on public disk
+            $club->save();
         }
-        $club = Club::create($data);
         return redirect()->route('admin.clubs.edit', $club->id)->with('status', 'Club created. You can now complete settings.');
     }
 
@@ -87,10 +96,19 @@ class ClubController extends Controller
             'logo' => 'nullable|image|max:5120',
         ]);
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('uploads/club_logos', 'public');
-            $data['logo_url'] = $path;
+            $file = $request->file('logo');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $base = Str::slug(($data['slug'] ?? $club->slug) ?: ($data['name'] ?? $club->name) ?: 'club');
+            $filename = $base.'-'.$club->id.'.'.$ext; // stable name
+            $relative = 'uploads/club_logos/'.$filename;
+            // Delete old file if different path or different extension
+            if (!empty($club->logo_url) && $club->logo_url !== $relative) {
+                Storage::disk('public')->delete($club->logo_url);
+            }
+            Storage::disk('public')->putFileAs('uploads/club_logos', $file, $filename);
+            $data['logo_url'] = $relative;
         }
-        $club->update($data);
+        $club->update(collect($data)->except('logo')->toArray());
         return redirect()->route('admin.clubs.edit', $club->id)->with('status', 'Club settings saved.');
     }
 

@@ -24,7 +24,7 @@
         <div>
             <div style="display:flex; align-items:center; gap:10px;">
                 @if(!empty($club->logo_url))
-                    <img src="{{ public_path('storage/'.$club->logo_url) }}" alt="{{ $club->name }} logo" style="height:48px; width:auto;" />
+                    <img src="{{ storage_path('app/public/'.$club->logo_url) }}" alt="{{ $club->name }} logo" style="height:48px; width:auto;" />
                 @endif
                 <h2 style="margin:0;">{{ $club->name }}</h2>
             </div>
