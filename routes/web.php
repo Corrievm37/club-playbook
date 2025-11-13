@@ -11,11 +11,15 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperDashboard;
 use App\Http\Controllers\SuperAdmin\UsersController as SuperUsers;
 use App\Http\Controllers\SuperAdmin\MembershipsController as SuperMemberships;
+use App\Http\Controllers\PublicAssetController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+// Public assets (serve club logos without symlink)
+Route::get('/public/club-logos/{filename}', [PublicAssetController::class, 'clubLogo'])->name('public.club_logo');
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
