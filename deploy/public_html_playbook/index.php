@@ -5,10 +5,12 @@
 
 // Try to detect the application base path dynamically.
 $candidates = [
+    // App nested under this web dir (common when placing project at public_html/playbook/app)
+    __DIR__ . '/app',
+    // App at current directory (rare but possible if project root is public_html/playbook)
+    __DIR__,
     // App outside webroot
     __DIR__ . '/../../playbook',
-    // App nested under this web dir
-    __DIR__ . '/app',
     // One-level up nested variant
     __DIR__ . '/../app',
 ];
