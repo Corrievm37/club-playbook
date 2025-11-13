@@ -1,0 +1,16 @@
+---
+deployment:
+  tasks:
+    - export APP_DIR="$HOME/playbook"
+    - export WEB_DIR="$HOME/public_html/playbook"
+    - mkdir -p "$WEB_DIR"
+    # Bridge files (bootstrap Laravel outside webroot)
+    - /bin/cp -f "$APP_DIR/deploy/public_html_playbook/index.php" "$WEB_DIR/index.php"
+    - /bin/cp -f "$APP_DIR/deploy/public_html_playbook/.htaccess" "$WEB_DIR/.htaccess"
+    # Publish built assets (Vite build)
+    - if [ -d "$APP_DIR/public/build" ]; then mkdir -p "$WEB_DIR/build"; /bin/cp -R "$APP_DIR/public/build/." "$WEB_DIR/build/"; fi
+    # Optional: expose storage (symlink if supported)
+    - if [ -d "$APP_DIR/storage/app/public" ] && [ ! -e "$WEB_DIR/storage" ]; then ln -s "$APP_DIR/storage/app/public" "$WEB_DIR/storage" || true; fi
+    # Permissions (best-effort)
+    - find "$APP_DIR/storage" -type d -exec chmod 775 {} \; || true
+    - find "$APP_DIR/bootstrap/cache" -type d -exec chmod 775 {} \; || true
