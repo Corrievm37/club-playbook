@@ -22,3 +22,11 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# AI/Avatar projects (not part of Laravel app)
+/SadTalker
+/ai-avatar-studio
+/ai-scene-generator
+/ai-video-mimic
+/did-avatar
+/lifelike-avatar
