@@ -25,3 +25,9 @@ deployment:
           mkdir -p "$REPO_DIR/images"
           /bin/cp -R "$REPO_DIR/public/images/." "$REPO_DIR/images/"
         fi
+    # Copy club logos to web-accessible location
+    - |
+        if [ -d "$REPO_DIR/storage/app/public/uploads/club_logos" ]; then
+          mkdir -p "$REPO_DIR/public/club-logos"
+          /bin/cp -R "$REPO_DIR/storage/app/public/uploads/club_logos/." "$REPO_DIR/public/club-logos/"
+        fi
