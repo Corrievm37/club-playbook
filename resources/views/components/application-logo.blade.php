@@ -1,1 +1,1 @@
-<img src="/playbook/images/logo.svg" alt="{{ config('app.name') }}" {{ $attributes }}>
+<img src="{{ asset('logo.svg') }}" alt="{{ config('app.name') }}" {{ $attributes }}>
