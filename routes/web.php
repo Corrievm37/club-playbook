@@ -82,10 +82,12 @@ Route::get('/install/success', [\App\Http\Controllers\InstallerController::class
     ])
     ->name('install.success');
 
-// Player registration - publicly accessible for parents
+// Player registration - requires parent to create account first
 Route::get('/register/{club}/player', [RegistrationController::class, 'create'])
+    ->middleware(['auth'])
     ->name('registration.create');
 Route::post('/register/{club}/player', [RegistrationController::class, 'store'])
+    ->middleware(['auth'])
     ->name('registration.store');
 Route::get('/register/thank-you', [RegistrationController::class, 'thankyou'])->name('registration.thankyou');
 
