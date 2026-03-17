@@ -1,11 +1,8 @@
 ---
 deployment:
   tasks:
-    # Repository is at /home/kuberdxi/public_html/playbook
+    # Repository is at /home/kuberdxi/public_html/playbook (Laravel app directly in web dir)
     - export REPO_DIR="$HOME/public_html/playbook"
-    # Copy bridge files to root (these bootstrap Laravel from the repo directory)
-    - /bin/cp -f "$REPO_DIR/deploy/public_html_playbook/index.php" "$REPO_DIR/index.php"
-    - /bin/cp -f "$REPO_DIR/deploy/public_html_playbook/.htaccess" "$REPO_DIR/.htaccess"
     # Ensure storage directories exist
     - mkdir -p "$REPO_DIR/storage/app/public/uploads/club_logos"
     - mkdir -p "$REPO_DIR/storage/framework/cache"
@@ -16,3 +13,15 @@ deployment:
     # Set permissions
     - chmod -R 775 "$REPO_DIR/storage" || true
     - chmod -R 775 "$REPO_DIR/bootstrap/cache" || true
+    # Copy public assets to web-accessible location (Vite builds to public/build, copy to playbook root)
+    - |
+        if [ -d "$REPO_DIR/public/build" ]; then
+          mkdir -p "$REPO_DIR/build"
+          /bin/cp -R "$REPO_DIR/public/build/." "$REPO_DIR/build/"
+        fi
+    # Copy public images to web-accessible location
+    - |
+        if [ -d "$REPO_DIR/public/images" ]; then
+          mkdir -p "$REPO_DIR/images"
+          /bin/cp -R "$REPO_DIR/public/images/." "$REPO_DIR/images/"
+        fi
